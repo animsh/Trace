@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/browseFragment">
+
+    <fragment
+        android:id="@+id/browseFragment"
+        android:name="com.animsh.trace.ui.BrowseFragment"
+        android:label="fragment_browse"
+        tools:layout="@layout/fragment_browse" />
+    <fragment
+        android:id="@+id/encryptionFragment"
+        android:name="com.animsh.trace.ui.EncryptionFragment"
+        android:label="fragment_encryption"
+        tools:layout="@layout/fragment_encryption" />
+</navigation>

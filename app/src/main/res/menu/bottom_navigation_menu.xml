@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/browseFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_browse_tab"
+        android:title="@string/browse_text" />
+    <item
+        android:id="@+id/encryptionFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_encryption"
+        android:title="@string/encryption_text" />
+</menu>
