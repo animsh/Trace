@@ -20,6 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -45,4 +50,9 @@ dependencies {
 
     // Lottie Animation
     implementation "com.airbnb.android:lottie:3.4.4"
+
+    // Android file chooser
+    implementation 'com.obsez.android.lib.filechooser:filechooser:1.2.0'
+
+
 }

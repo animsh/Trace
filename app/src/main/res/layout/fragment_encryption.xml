@@ -24,10 +24,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_text"
+            android:text="@string/fast_and_easy_file_nencryption_amp_decryption"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="22dp" />
+            android:textSize="22sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -36,6 +36,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_encrypt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
@@ -49,6 +50,7 @@
                 app:rippleColor="@color/quantum_googblue700" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_decrypt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"

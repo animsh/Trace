@@ -12,5 +12,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="decrypt_text">Decrypt</string>
     <string name="encrypt_text">Encrypt</string>
-    <string name="title_text">Fast and Easy File\nEncryption and Decryption</string>
+    <string name="fast_and_easy_file_nencryption_amp_decryption"><![CDATA[Fast and Easy File\nEncryption & Decryption]]></string>
 </resources>
