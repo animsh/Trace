@@ -1,5 +1,6 @@
 package com.animsh.trace;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,18 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
 
                 // set action to selected item
-                if (id == R.id.menuEncryptedFiles) {
-                    Toast.makeText(MainActivity.this, "Open encrypted files directory", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (id == R.id.menuDecryptedFiles) {
-                    Toast.makeText(MainActivity.this, "Open decrypted files directory", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (id == R.id.menuSetting) {
+                if (id == R.id.menuSetting) {
                     Toast.makeText(MainActivity.this, "Open Setting Activity", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                    startActivity(intent);
                     return true;
-                } else if (id == R.id.menuAbout) {
-                    Toast.makeText(MainActivity.this, "Open About Activity", Toast.LENGTH_SHORT).show();
-                    return true;
+                } else if (id == R.id.menuHelp) {
+                    Toast.makeText(MainActivity.this, "Open HElp & Feedback Activity", Toast.LENGTH_SHORT).show();
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
                 return true;

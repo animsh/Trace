@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
+   <!-- <item
         android:id="@+id/menuEncryptedFiles"
         android:icon="@drawable/ic_lock"
         android:title="@string/encrypted_files" />
@@ -9,16 +9,21 @@
     <item
         android:id="@+id/menuDecryptedFiles"
         android:icon="@drawable/ic_unlock"
-        android:title="@string/decrypted_files" />
+        android:title="@string/decrypted_files" />-->
 
     <item
         android:id="@+id/menuSetting"
-        android:icon="@drawable/ic_setting"
+        android:icon="@drawable/ic_settings"
         android:title="@string/setting" />
 
     <item
+        android:id="@+id/menuHelp"
+        android:icon="@drawable/ic_help"
+        android:title="@string/help_and_feedback" />
+
+   <!-- <item
         android:id="@+id/menuAbout"
         android:icon="@drawable/ic_info"
-        android:title="@string/about" />
+        android:title="@string/about" />-->
 
 </menu>

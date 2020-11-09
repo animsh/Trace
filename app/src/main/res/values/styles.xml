@@ -9,6 +9,15 @@
         <item name="fileChooserStyle">@style/FileChooserStyle_Dark</item>
     </style>
 
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/quantum_googblue500</item>
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">@color/colorPrimaryText</item>
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">@color/colorPrimaryText</item>
+    </style>
+
     <!-- Dark theme example for file chooser -->
     <style name="FileChooserStyle_Dark" parent="FileChooserStyle">
         <item name="fileChooserDialogGravity">center</item>
