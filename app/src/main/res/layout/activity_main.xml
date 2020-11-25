@@ -49,9 +49,9 @@
             android:layout_height="0dp"
             app:defaultNavHost="true"
             app:layout_constraintBottom_toTopOf="@id/supporterView"
-            app:layout_constraintTop_toBottomOf="@id/layoutToolBar"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutToolBar"
             app:navGraph="@navigation/bottom_navigation"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="57dp" />

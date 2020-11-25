@@ -31,7 +31,6 @@
         <item name="android:windowBackground">@color/background_dark</item>
         <item name="android:textColorPrimary">@color/quantum_googblue500</item>
         <item name="colorAccent">@color/quantum_googblue500</item>
-        <item name="android:useDefaultMargins">true</item>
         <item name="android:windowTitleStyle">@style/FileChooserTitleStyle_Dark</item>
         <item name="android:buttonBarButtonStyle">@style/FileChooserButtonStyle_Dark</item>
         <item name="buttonBarButtonStyle">@style/FileChooserButtonStyle_Dark</item>
@@ -41,6 +40,7 @@
     <style name="FileChooserTitleStyle_Dark" parent="FileChooserTitleStyle">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title.Inverse</item>
         <item name="android:textColor">@color/quantum_googblue500</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="FileChooserButtonStyle_Dark" parent="FileChooserButtonStyle">

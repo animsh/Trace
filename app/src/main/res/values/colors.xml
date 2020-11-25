@@ -13,8 +13,8 @@
     <color name="quantum_googblue700">#ff3367d6</color>
 
     <color name="li_row_background_dark">#ffffff</color>
-    <color name="li_row_background_tint_dark">#ffffff</color>
-    <color name="li_row_selector_dark">#ffffff</color>
+    <color name="li_row_background_tint_dark">@color/quantum_googblue500</color>
+    <color name="li_row_selector_dark">#4D498EFF</color>
     <color name="text_light">@color/quantum_googblue500</color>
     <color name="background_dark">#ffffff</color>
     <color name="text_light_opaque">#903B78E6</color>

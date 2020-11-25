@@ -3,18 +3,22 @@ package com.animsh.trace.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,18 +46,73 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptionFragment extends Fragment {
 
-    private LottieAnimationView animationView;
-    private MaterialButton btnEncrypt, btnDecrypt;
+    private static final int REQUEST_RUNTIME_PERMISSION = 123;
     public static String encryptFolder = "Trace/Encrypted Files";
     public static String decryptFolder = "Trace/Decrypted Files";
-    private static final int REQUEST_RUNTIME_PERMISSION = 123;
     public static String stringFilePath;
     public static File fileFilePath;
     String encrypt = "Encrypt";
     String decrypt = "Decrypt";
+    private LottieAnimationView animationView;
+
 
     public EncryptionFragment() {
         // Required empty public constructor
+    }
+
+    static void encrypt(String path, String fileName, Dialog dialog) throws IOException, NoSuchAlgorithmException,
+            NoSuchPaddingException, InvalidKeyException {
+        // Here you read the cleartext.
+        File extStore = Environment.getExternalStorageDirectory();
+        FileInputStream fis = new FileInputStream(path);
+        // This stream write the encrypted text. This stream will be wrapped by
+        // another stream.
+
+        FileOutputStream fos = new FileOutputStream(extStore + "/" + encryptFolder + "/" + fileName + ".enc");
+
+        // Length is 16 byte
+        SecretKeySpec sks = new SecretKeySpec("MyDifficultPassw".getBytes(),
+                "AES");
+        // Create cipher
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, sks);
+        // Wrap the output stream
+        CipherOutputStream cos = new CipherOutputStream(fos, cipher);
+        // Write bytes
+
+        int b;
+        byte[] d = new byte[10 * 1024 * 1024];
+        while ((b = fis.read(d)) != -1) {
+            cos.write(d, 0, b);
+        }
+        // Flush and close streams.
+        cos.flush();
+        cos.close();
+        fis.close();
+        dialog.dismiss();
+    }
+
+    static void decrypt(String path, String fileName, Dialog dialog) throws IOException, NoSuchAlgorithmException,
+            NoSuchPaddingException, InvalidKeyException {
+
+        File extStore = Environment.getExternalStorageDirectory();
+        FileInputStream fis = new FileInputStream(path);
+
+        FileOutputStream fos = new FileOutputStream(extStore + "/" + decryptFolder + "/" + fileName);
+        SecretKeySpec sks = new SecretKeySpec("MyDifficultPassw".getBytes(),
+                "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.DECRYPT_MODE, sks);
+        CipherInputStream cis = new CipherInputStream(fis, cipher);
+        int b;
+        byte[] d = new byte[10 * 1024 * 1024];
+        while ((b = cis.read(d)) != -1) {
+            fos.write(d, 0, b);
+        }
+        fos.flush();
+        fos.close();
+        cis.close();
+        dialog.dismiss();
     }
 
     @Override
@@ -61,6 +120,20 @@ public class EncryptionFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_encryption, container, false);
+
+        // Paths for Internal And External Storage
+        File dir = Environment.getExternalStorageDirectory();
+        String path = FileUtil.getStoragePath(requireContext(), true);
+        Log.d("Internal", ": " + dir);
+        Log.d("External", ": " + path);
+
+        // Permission Checker
+        if (CheckPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            createApplicationFolder(path, dir);
+        } else {
+            // you do not have permission go request runtime permissions
+            RequestPermission((Activity) getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_RUNTIME_PERMISSION);
+        }
 
         // Lottie Animation Setup
         animationView = view.findViewById(R.id.animation_view);
@@ -73,68 +146,74 @@ public class EncryptionFragment extends Fragment {
         // Lottie Animation Setup
 
         // Encryption and Decryption Confirmation Dialog
-        Dialog dialog = new Dialog(getContext());
+        Dialog dialog = new Dialog(requireContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.confirmation_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         TextView pathOfFile = dialog.findViewById(R.id.path_of_file);
+        ImageView browseAgain = dialog.findViewById(R.id.browse_again);
         MaterialButton processBtn = dialog.findViewById(R.id.process_btn);
-        LottieAnimationView animationView1 = dialog.findViewById(R.id.animation_view);
+        MaterialButton cancelBtn = dialog.findViewById(R.id.cancel_btn);
+
+        pathOfFile.setSelected(true);
 
         processBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animationView1.setVisibility(View.VISIBLE);
                 if (processBtn.getText().toString().equals(encrypt)) {
-                    ProgressDialog progressDialog = new ProgressDialog(requireContext());
-                    progressDialog.show();
-                    progressDialog.setContentView(R.layout.loading_dialog);
-                    Toast.makeText(getContext(), "Inside if", Toast.LENGTH_SHORT).show();
-                    String strFileName = fileFilePath.getName();
-                    String[] parts = strFileName.split("\\.");
-                    String fileName = parts[0];
-                    Toast.makeText(getContext(), "FILE: " + fileName, Toast.LENGTH_SHORT).show();
-                    try {
-                        encrypt(stringFilePath, strFileName, progressDialog);
-                    } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    dialog.dismiss();
+                    new EncryptTask(getContext()).execute();
                 } else if (processBtn.getText().toString().equals(decrypt)) {
-                    ProgressDialog progressDialog = new ProgressDialog(requireContext());
-                    progressDialog.show();
-                    progressDialog.setContentView(R.layout.loading_dialog);
-                    String strFileName = fileFilePath.getName();
-                    String[] parts = strFileName.split("\\.");
-                    String fileName = parts[0];
-                    String extension = parts[1];
-                    String wholeFileName = fileName + "." + extension;
-                    Toast.makeText(getContext(), "FILE: " + wholeFileName, Toast.LENGTH_SHORT).show();
-
-                    try {
-                        decrypt(stringFilePath, wholeFileName, progressDialog);
-                    } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                    dialog.dismiss();
+                    new DecryptTask(getContext()).execute();
                 }
+            }
+        });
+
+        browseAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (processBtn.getText() == encrypt) {
+                    fileChooser(path, pathOfFile, processBtn, dialog, true);
+                } else {
+                    fileChooser(path, pathOfFile, processBtn, dialog, false);
+                }
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
             }
         });
         // Encryption and Decryption Confirmation Dialog
 
+        // Button Listeners
+        MaterialButton btnEncrypt = view.findViewById(R.id.btn_encrypt);
+        MaterialButton btnDecrypt = view.findViewById(R.id.btn_decrypt);
 
-        // Paths for Internal And External Storage
-        File dir = Environment.getExternalStorageDirectory();
-        String path = FileUtil.getStoragePath(requireContext(), true);
-        Log.d("Internal", ": " + dir);
-        Log.d("External", ": " + path);
+        btnEncrypt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileChooser(path, pathOfFile, processBtn, dialog, true);
+            }
 
-        if (CheckPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            // you have permission go ahead
-//            createApplicationFolder();
-        } else {
-            // you do not have permission go request runtime permissions
-            RequestPermission((Activity) getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_RUNTIME_PERMISSION);
-        }
+        });
 
+        btnDecrypt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fileChooser(path, pathOfFile, processBtn, dialog, false);
+            }
+        });
+        // Button Listeners
+        return view;
+    }
+
+    private void createApplicationFolder(String path, File dir) {
         File media = new File(path, "Trace");
         File mediaStorageDir = new File(dir, encryptFolder);
         File mediaStorageDirs = new File(dir, decryptFolder);
@@ -156,132 +235,35 @@ public class EncryptionFragment extends Fragment {
                 Log.d("App", "failed to create directory");
             }
         }
-
-
-        // Button Listeners
-        btnEncrypt = view.findViewById(R.id.btn_encrypt);
-        btnDecrypt = view.findViewById(R.id.btn_decrypt);
-
-
-        btnEncrypt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new ChooserDialog(getContext())
-                        .withStartFile(path)
-                        .withFileIconsRes(false, R.drawable.ic_paper, R.drawable.ic_folder)
-                        .withChosenListener(new ChooserDialog.Result() {
-                            @Override
-                            public void onChoosePath(String path, File pathFile) {
-                                stringFilePath = path;
-                                fileFilePath = pathFile;
-                                pathOfFile.setText(stringFilePath);
-                                processBtn.setText(encrypt);
-                                dialog.show();
-                            }
-                        })
-                        // to handle the back key pressed or clicked outside the dialog:
-                        .withOnCancelListener(new DialogInterface.OnCancelListener() {
-                            public void onCancel(DialogInterface dialog) {
-                                Log.d("CANCEL", "CANCEL");
-                                dialog.cancel(); // MUST have
-                            }
-                        })
-                        .build()
-                        .show();
-
-                Toast.makeText(getContext(), "Path: " + stringFilePath, Toast.LENGTH_SHORT).show();
-            }
-
-        });
-
-        btnDecrypt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new ChooserDialog(getContext())
-                        .withStartFile(path)
-                        .withFileIconsRes(false, R.drawable.ic_paper, R.drawable.ic_folder)
-                        .withChosenListener(new ChooserDialog.Result() {
-                            @Override
-                            public void onChoosePath(String path, File pathFile) {
-                                stringFilePath = path;
-                                fileFilePath = pathFile;
-                                pathOfFile.setText(stringFilePath);
-                                processBtn.setText(decrypt);
-                                dialog.show();
-                            }
-                        })
-                        // to handle the back key pressed or clicked outside the dialog:
-                        .withOnCancelListener(new DialogInterface.OnCancelListener() {
-                            public void onCancel(DialogInterface dialog) {
-                                Log.d("CANCEL", "CANCEL");
-                                dialog.cancel(); // MUST have
-                            }
-                        })
-                        .withOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
-                            }
-                        })
-                        .build()
-                        .show();
-            }
-        });
-        // Button Listeners
-        return view;
     }
 
-    static void encrypt(String path, String fileName, ProgressDialog dialog) throws IOException, NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeyException {
-        // Here you read the cleartext.
-        File extStore = Environment.getExternalStorageDirectory();
-        FileInputStream fis = new FileInputStream(path);
-        // This stream write the encrypted text. This stream will be wrapped by
-        // another stream.
-
-        FileOutputStream fos = new FileOutputStream(extStore + "/" + encryptFolder + "/" + fileName + ".enc");
-
-        // Length is 16 byte
-        SecretKeySpec sks = new SecretKeySpec("MyDifficultPassw".getBytes(),
-                "AES");
-        // Create cipher
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.ENCRYPT_MODE, sks);
-        // Wrap the output stream
-        CipherOutputStream cos = new CipherOutputStream(fos, cipher);
-        // Write bytes
-
-        int b;
-        byte[] d = new byte[8];
-        while ((b = fis.read(d)) != -1) {
-            cos.write(d, 0, b);
-        }
-        // Flush and close streams.
-        cos.flush();
-        cos.close();
-        fis.close();
-    }
-
-    static void decrypt(String path, String fileName, ProgressDialog dialog) throws IOException, NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeyException {
-
-        File extStore = Environment.getExternalStorageDirectory();
-        FileInputStream fis = new FileInputStream(path);
-
-        FileOutputStream fos = new FileOutputStream(extStore + "/" + decryptFolder + "/" + fileName);
-        SecretKeySpec sks = new SecretKeySpec("MyDifficultPassw".getBytes(),
-                "AES");
-        Cipher cipher = Cipher.getInstance("AES");
-        cipher.init(Cipher.DECRYPT_MODE, sks);
-        CipherInputStream cis = new CipherInputStream(fis, cipher);
-        int b;
-        byte[] d = new byte[8];
-        while ((b = cis.read(d)) != -1) {
-            fos.write(d, 0, b);
-        }
-        fos.flush();
-        fos.close();
-        cis.close();
-        dialog.dismiss();
+    public void fileChooser(String path, TextView pathOfFile, Button processBtn, Dialog dialog, boolean isEncryptSelected) {
+        new ChooserDialog(getContext())
+                .withStartFile(path)
+                .withFileIconsRes(false, R.drawable.ic_paper, R.drawable.ic_folder)
+                .withChosenListener(new ChooserDialog.Result() {
+                    @Override
+                    public void onChoosePath(String path, File pathFile) {
+                        stringFilePath = path;
+                        fileFilePath = pathFile;
+                        pathOfFile.setText(stringFilePath);
+                        if (isEncryptSelected) {
+                            processBtn.setText(encrypt);
+                        } else {
+                            processBtn.setText(decrypt);
+                        }
+                        dialog.show();
+                    }
+                })
+                // to handle the back key pressed or clicked outside the dialog:
+                .withOnCancelListener(new DialogInterface.OnCancelListener() {
+                    public void onCancel(DialogInterface dialog) {
+                        Log.d("CANCEL", "CANCEL");
+                        dialog.cancel(); // MUST have
+                    }
+                })
+                .build()
+                .show();
     }
 
     @Override
@@ -321,6 +303,103 @@ public class EncryptionFragment extends Fragment {
             return true;
         } else {
             return false;
+        }
+    }
+
+    public static class EncryptTask extends AsyncTask<String, Void, String> {
+
+        private Context context;
+        private Dialog dialog;
+
+        public EncryptTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String strFileName = fileFilePath.getName();
+            String[] parts = strFileName.split("\\.");
+            String fileName = parts[0];
+            try {
+                encrypt(stringFilePath, strFileName, dialog);
+            } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.loading_dialog);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
+        }
+    }
+
+    public class DecryptTask extends AsyncTask<String, Void, String> {
+
+        private Context context;
+        private Dialog dialog;
+
+        public DecryptTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String strFileName = fileFilePath.getName();
+            String[] parts = strFileName.split("\\.");
+            String fileName = parts[0];
+            String extension = null;
+            if (parts[1] != null) {
+                extension = parts[1];
+            }
+            String wholeFileName = fileName + "." + extension;
+            try {
+                decrypt(stringFilePath, wholeFileName, dialog);
+            } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (dialog.isShowing()) {
+                dialog.dismiss();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.loading_dialog);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            if (!dialog.isShowing()) {
+                dialog.show();
+            }
         }
     }
 }

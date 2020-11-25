@@ -121,16 +121,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_margin="15dp"
                     android:contentDescription="dark mode drawable"
-                    android:src="@drawable/ic_night_mode"
-                     />
+                    android:src="@drawable/ic_night_mode" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -171,16 +169,14 @@
                     android:layout_height="22dp"
                     android:layout_margin="15dp"
                     android:contentDescription="dark mode drawable"
-                    android:src="@drawable/ic_info"
-                    />
+                    android:src="@drawable/ic_info" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="About Trace App"
                     android:textAlignment="center"
-                    android:textColor="@color/colorPrimaryText"
-                    />
+                    android:textColor="@color/colorPrimaryText" />
 
             </LinearLayout>
 
