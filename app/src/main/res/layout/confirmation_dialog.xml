@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:visibility="gone"
+        android:id="@+id/animation_view"
+        app:lottie_autoPlay="true"
+        app:lottie_rawRes="@raw/loading_animation"
+        app:lottie_loop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/path_of_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:textSize="16sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/process_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/path_of_file"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:text="Process"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryText" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/path_of_file"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryText" />
+</RelativeLayout>
