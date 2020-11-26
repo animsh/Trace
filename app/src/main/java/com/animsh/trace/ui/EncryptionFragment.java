@@ -11,12 +11,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +37,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.Cipher;
@@ -51,27 +54,27 @@ public class EncryptionFragment extends Fragment {
     public static String decryptFolder = "Trace/Decrypted Files";
     public static String stringFilePath;
     public static File fileFilePath;
+    public static String AES = "AES";
     String encrypt = "Encrypt";
     String decrypt = "Decrypt";
-    private LottieAnimationView animationView;
+    private LottieAnimationView animationView, lockAnimation;
 
 
     public EncryptionFragment() {
         // Required empty public constructor
     }
 
-    static void encrypt(String path, String fileName, Dialog dialog) throws IOException, NoSuchAlgorithmException,
-            NoSuchPaddingException, InvalidKeyException {
+    static void encrypt(String path, String fileName, Dialog dialog, EditText password) throws Exception {
         // Here you read the cleartext.
         File extStore = Environment.getExternalStorageDirectory();
         FileInputStream fis = new FileInputStream(path);
         // This stream write the encrypted text. This stream will be wrapped by
         // another stream.
+        String pass = encrypt(password.getText().toString(), "TraceecarT");
 
-        FileOutputStream fos = new FileOutputStream(extStore + "/" + encryptFolder + "/" + fileName + ".enc");
-
+        FileOutputStream fos = new FileOutputStream(extStore + "/" + encryptFolder + "/" + fileName + "." + pass);
         // Length is 16 byte
-        SecretKeySpec sks = new SecretKeySpec("MyDifficultPassw".getBytes(),
+        SecretKeySpec sks = new SecretKeySpec(password.getText().toString().getBytes(),
                 "AES");
         // Create cipher
         Cipher cipher = Cipher.getInstance("AES");
@@ -92,14 +95,14 @@ public class EncryptionFragment extends Fragment {
         dialog.dismiss();
     }
 
-    static void decrypt(String path, String fileName, Dialog dialog) throws IOException, NoSuchAlgorithmException,
+    static void decrypt(String path, String fileName, Dialog dialog, EditText password) throws IOException, NoSuchAlgorithmException,
             NoSuchPaddingException, InvalidKeyException {
 
         File extStore = Environment.getExternalStorageDirectory();
         FileInputStream fis = new FileInputStream(path);
 
         FileOutputStream fos = new FileOutputStream(extStore + "/" + decryptFolder + "/" + fileName);
-        SecretKeySpec sks = new SecretKeySpec("MyDifficultPassw".getBytes(),
+        SecretKeySpec sks = new SecretKeySpec(password.getText().toString().getBytes(),
                 "AES");
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, sks);
@@ -113,6 +116,33 @@ public class EncryptionFragment extends Fragment {
         fos.close();
         cis.close();
         dialog.dismiss();
+    }
+
+    public static String encrypt(String Data, String password) throws Exception {
+        SecretKeySpec key = generateKey(password);
+        Cipher c = Cipher.getInstance(AES);
+        c.init(Cipher.ENCRYPT_MODE, key);
+        byte[] encVal = c.doFinal(Data.getBytes());
+        return Base64.encodeToString(encVal, Base64.DEFAULT);
+
+    }
+
+    public static String decrypt(String outputString, String password) throws Exception {
+        SecretKeySpec key = generateKey(password);
+        Cipher c = Cipher.getInstance(AES);
+        c.init(Cipher.DECRYPT_MODE, key);
+        byte[] decodedValue = Base64.decode(outputString, Base64.DEFAULT);
+        byte[] decValue = c.doFinal(decodedValue);
+        return new String(decValue);
+    }
+
+    public static SecretKeySpec generateKey(String password) throws Exception {
+        final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] bytes = password.getBytes("UTF-8");
+        digest.update(bytes, 0, bytes.length);
+        byte[] key = digest.digest();
+        return new SecretKeySpec(key, "AES");
+
     }
 
     @Override
@@ -137,10 +167,13 @@ public class EncryptionFragment extends Fragment {
 
         // Lottie Animation Setup
         animationView = view.findViewById(R.id.animation_view);
+        lockAnimation = view.findViewById(R.id.lock_animation_view);
         animationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                animationView.setSpeed(2);
                 animationView.playAnimation();
+                lockAnimation.playAnimation();
             }
         });
         // Lottie Animation Setup
@@ -154,6 +187,7 @@ public class EncryptionFragment extends Fragment {
         dialog.setCancelable(false);
         TextView pathOfFile = dialog.findViewById(R.id.path_of_file);
         ImageView browseAgain = dialog.findViewById(R.id.browse_again);
+        EditText passwordForProcess = dialog.findViewById(R.id.password_et);
         MaterialButton processBtn = dialog.findViewById(R.id.process_btn);
         MaterialButton cancelBtn = dialog.findViewById(R.id.cancel_btn);
 
@@ -163,11 +197,32 @@ public class EncryptionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (processBtn.getText().toString().equals(encrypt)) {
-                    dialog.dismiss();
-                    new EncryptTask(getContext()).execute();
+                    if (passwordForProcess.length() != 16) {
+                        passwordForProcess.setError("Password Must be of 16 characters");
+                    } else {
+                        dialog.dismiss();
+                        new EncryptTask(getContext(), passwordForProcess).execute();
+                    }
                 } else if (processBtn.getText().toString().equals(decrypt)) {
-                    dialog.dismiss();
-                    new DecryptTask(getContext()).execute();
+                    if (passwordForProcess.length() != 16) {
+                        passwordForProcess.setError("Password Must be of 16 characters");
+                    } else {
+                        String[] parts = stringFilePath.split("\\.");
+                        Log.e("Part 1: ", parts[parts.length - 1]);
+                        String dec = null;
+                        try {
+                            dec = decrypt(parts[parts.length - 1], "TraceecarT");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (passwordForProcess.getText().toString().equals(dec)) {
+                            dialog.dismiss();
+                            new DecryptTask(getContext(), passwordForProcess).execute();
+                        } else {
+                            passwordForProcess.setError("Password might be wrong");
+                        }
+
+                    }
                 }
             }
         });
@@ -186,6 +241,7 @@ public class EncryptionFragment extends Fragment {
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                passwordForProcess.setText("");
                 dialog.dismiss();
             }
         });
@@ -308,11 +364,13 @@ public class EncryptionFragment extends Fragment {
 
     public static class EncryptTask extends AsyncTask<String, Void, String> {
 
+        EditText password;
         private Context context;
         private Dialog dialog;
 
-        public EncryptTask(Context context) {
+        public EncryptTask(Context context, EditText password) {
             this.context = context;
+            this.password = password;
         }
 
         @Override
@@ -321,8 +379,8 @@ public class EncryptionFragment extends Fragment {
             String[] parts = strFileName.split("\\.");
             String fileName = parts[0];
             try {
-                encrypt(stringFilePath, strFileName, dialog);
-            } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException e) {
+                encrypt(stringFilePath, strFileName, dialog, password);
+            } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
@@ -332,6 +390,7 @@ public class EncryptionFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            password.setText("");
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
@@ -354,11 +413,13 @@ public class EncryptionFragment extends Fragment {
 
     public class DecryptTask extends AsyncTask<String, Void, String> {
 
+        EditText password;
         private Context context;
         private Dialog dialog;
 
-        public DecryptTask(Context context) {
+        public DecryptTask(Context context, EditText password) {
             this.context = context;
+            this.password = password;
         }
 
         @Override
@@ -366,13 +427,11 @@ public class EncryptionFragment extends Fragment {
             String strFileName = fileFilePath.getName();
             String[] parts = strFileName.split("\\.");
             String fileName = parts[0];
-            String extension = null;
-            if (parts[1] != null) {
-                extension = parts[1];
-            }
+            String extension = parts[parts.length - 2];
+
             String wholeFileName = fileName + "." + extension;
             try {
-                decrypt(stringFilePath, wholeFileName, dialog);
+                decrypt(stringFilePath, wholeFileName, dialog, password);
             } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

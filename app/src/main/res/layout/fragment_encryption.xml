@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.EncryptionFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
@@ -15,23 +15,38 @@
         android:orientation="vertical">
 
         <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lock_animation_view"
+            android:layout_width="370dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@id/animation_view"
+            app:lottie_autoPlay="true"
+            app:lottie_rawRes="@raw/lock" />
+
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view"
             android:layout_width="370dp"
             android:layout_height="200dp"
             app:lottie_autoPlay="true"
             app:lottie_rawRes="@raw/offline_sharing_animation" />
 
+
         <TextView
+            android:id="@+id/des_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/animation_view"
+            android:layout_centerHorizontal="true"
             android:text="@string/fast_and_easy_file_nencryption_amp_decryption"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryText"
             android:textSize="22sp" />
 
         <LinearLayout
+            android:id="@+id/container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/des_text"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
@@ -64,6 +79,6 @@
                 app:rippleColor="@color/quantum_googblue700" />
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </FrameLayout>

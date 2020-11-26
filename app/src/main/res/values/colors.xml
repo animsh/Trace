@@ -2,10 +2,11 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">@color/quantum_googblue700</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">@color/quantum_googblue600</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorGreen">#32CD32</color>
+    <color name="red">#ffff0000</color>
 
     <color name="quantum_googblue400">#FF498EFF</color>
     <color name="quantum_googblue500">#ff4285f4</color>
