@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -18,17 +19,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.animsh.trace.R;
+import com.animsh.trace.UploadModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.obsez.android.lib.filechooser.ChooserDialog;
 import com.obsez.android.lib.filechooser.internals.FileUtil;
 
@@ -55,24 +68,28 @@ public class EncryptionFragment extends Fragment {
     public static String stringFilePath;
     public static File fileFilePath;
     public static String AES = "AES";
+    private static Uri fileURI;
     String encrypt = "Encrypt";
     String decrypt = "Decrypt";
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private LottieAnimationView animationView, lockAnimation;
-
+    private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(mAuth.getUid());
+    private StorageReference reference = FirebaseStorage.getInstance().getReference().child(mAuth.getUid());
 
     public EncryptionFragment() {
         // Required empty public constructor
     }
 
-    static void encrypt(String path, String fileName, Dialog dialog, EditText password) throws Exception {
+    static Uri encrypt(String path, String fileName, Dialog dialog, EditText password) throws Exception {
         // Here you read the cleartext.
         File extStore = Environment.getExternalStorageDirectory();
         FileInputStream fis = new FileInputStream(path);
         // This stream write the encrypted text. This stream will be wrapped by
         // another stream.
         String pass = encrypt(password.getText().toString(), "TraceecarT");
-
-        FileOutputStream fos = new FileOutputStream(extStore + "/" + encryptFolder + "/" + fileName + "." + pass);
+        File newFile = new File(extStore + "/" + encryptFolder + "/" + fileName + "." + pass);
+        FileOutputStream fos = new FileOutputStream(newFile);
+        Log.e("URI ", "encrypt: " + Uri.fromFile(newFile).toString());
         // Length is 16 byte
         SecretKeySpec sks = new SecretKeySpec(password.getText().toString().getBytes(),
                 "AES");
@@ -92,7 +109,7 @@ public class EncryptionFragment extends Fragment {
         cos.flush();
         cos.close();
         fis.close();
-        dialog.dismiss();
+        return Uri.fromFile(newFile);
     }
 
     static void decrypt(String path, String fileName, Dialog dialog, EditText password) throws IOException, NoSuchAlgorithmException,
@@ -145,6 +162,40 @@ public class EncryptionFragment extends Fragment {
 
     }
 
+    public void uploadFIle(Uri file) {
+        if (file != null) {
+            String[] parts = file.toString().split("\\/");
+            String name = parts[parts.length - 1];
+            StorageReference fileReference = reference.child(name);
+            fileReference.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            //UploadModel model = new UploadModel(uri.toString());
+                            UploadModel upload = new UploadModel(name, uri.toString());
+                            String modelId = root.push().getKey();
+                            root.child(modelId).setValue(upload);
+                            Log.e("UPLOAD DONE: ", "Success");
+                        }
+                    });
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("UPLOAD ERROR:", "Uploading Failed");
+                }
+            });
+        } else {
+            Log.e("UPLOAD ERROR: ", "URI is null");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -187,11 +238,13 @@ public class EncryptionFragment extends Fragment {
         dialog.setCancelable(false);
         TextView pathOfFile = dialog.findViewById(R.id.path_of_file);
         ImageView browseAgain = dialog.findViewById(R.id.browse_again);
+        CheckBox uploadCheckBox = dialog.findViewById(R.id.upload_checkbox);
         EditText passwordForProcess = dialog.findViewById(R.id.password_et);
         MaterialButton processBtn = dialog.findViewById(R.id.process_btn);
         MaterialButton cancelBtn = dialog.findViewById(R.id.cancel_btn);
 
         pathOfFile.setSelected(true);
+
 
         processBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +254,12 @@ public class EncryptionFragment extends Fragment {
                         passwordForProcess.setError("Password Must be of 16 characters");
                     } else {
                         dialog.dismiss();
-                        new EncryptTask(getContext(), passwordForProcess).execute();
+                        if (uploadCheckBox.isChecked()) {
+                            new EncryptTask(getContext(), passwordForProcess, true).execute();
+                        } else {
+                            new EncryptTask(getContext(), passwordForProcess, false).execute();
+
+                        }
                     }
                 } else if (processBtn.getText().toString().equals(decrypt)) {
                     if (passwordForProcess.length() != 16) {
@@ -231,9 +289,9 @@ public class EncryptionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (processBtn.getText() == encrypt) {
-                    fileChooser(path, pathOfFile, processBtn, dialog, true);
+                    fileChooser(path, pathOfFile, processBtn, dialog, true, uploadCheckBox);
                 } else {
-                    fileChooser(path, pathOfFile, processBtn, dialog, false);
+                    fileChooser(path, pathOfFile, processBtn, dialog, false, uploadCheckBox);
                 }
             }
         });
@@ -254,7 +312,7 @@ public class EncryptionFragment extends Fragment {
         btnEncrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fileChooser(path, pathOfFile, processBtn, dialog, true);
+                fileChooser(path, pathOfFile, processBtn, dialog, true, uploadCheckBox);
             }
 
         });
@@ -262,7 +320,7 @@ public class EncryptionFragment extends Fragment {
         btnDecrypt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fileChooser(path, pathOfFile, processBtn, dialog, false);
+                fileChooser(path, pathOfFile, processBtn, dialog, false, uploadCheckBox);
             }
         });
         // Button Listeners
@@ -293,7 +351,7 @@ public class EncryptionFragment extends Fragment {
         }
     }
 
-    public void fileChooser(String path, TextView pathOfFile, Button processBtn, Dialog dialog, boolean isEncryptSelected) {
+    public void fileChooser(String path, TextView pathOfFile, Button processBtn, Dialog dialog, boolean isEncryptSelected, CheckBox upload) {
         new ChooserDialog(getContext())
                 .withStartFile(path)
                 .withFileIconsRes(false, R.drawable.ic_paper, R.drawable.ic_folder)
@@ -305,8 +363,10 @@ public class EncryptionFragment extends Fragment {
                         pathOfFile.setText(stringFilePath);
                         if (isEncryptSelected) {
                             processBtn.setText(encrypt);
+                            upload.setVisibility(View.VISIBLE);
                         } else {
                             processBtn.setText(decrypt);
+                            upload.setVisibility(View.GONE);
                         }
                         dialog.show();
                     }
@@ -362,15 +422,17 @@ public class EncryptionFragment extends Fragment {
         }
     }
 
-    public static class EncryptTask extends AsyncTask<String, Void, String> {
+    public class EncryptTask extends AsyncTask<String, Void, String> {
 
         EditText password;
         private Context context;
         private Dialog dialog;
+        private boolean upload;
 
-        public EncryptTask(Context context, EditText password) {
+        public EncryptTask(Context context, EditText password, boolean upload) {
             this.context = context;
             this.password = password;
+            this.upload = upload;
         }
 
         @Override
@@ -379,11 +441,15 @@ public class EncryptionFragment extends Fragment {
             String[] parts = strFileName.split("\\.");
             String fileName = parts[0];
             try {
-                encrypt(stringFilePath, strFileName, dialog, password);
+                Uri file = encrypt(stringFilePath, strFileName, dialog, password);
+                if (upload) {
+                    uploadFIle(file);
+                }
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
             return "Executed";
         }
 

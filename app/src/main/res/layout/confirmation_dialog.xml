@@ -74,12 +74,18 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <CheckBox
+        android:id="@+id/upload_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password_et_container"
+        android:text="Upload after encrypting file" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/process_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password_et_container"
+        android:layout_below="@+id/upload_checkbox"
         android:layout_alignParentStart="true"
         android:layout_margin="5dp"
         android:text="Process"
@@ -91,7 +97,7 @@
         android:id="@+id/cancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password_et_container"
+        android:layout_below="@+id/upload_checkbox"
         android:layout_alignParentEnd="true"
         android:layout_margin="5dp"
         android:text="Cancel"
