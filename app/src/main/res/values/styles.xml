@@ -79,6 +79,11 @@
         <item name="fileChooserNewFolderSoftInputMode">adjustResize</item>
     </style>
 
+    <style name="colored_checkbox" parent="AppTheme">
+        <item name="colorAccent">@color/quantum_googblue600</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryText</item>
+    </style>
+
     <style name="MyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
 
         <!-- Style attributes -->
@@ -112,4 +117,18 @@
         <item name="android:textSize">14sp</item>
 
     </style>
+
+    <style name="BlueProgressBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/quantum_googblue600</item>
+        <item name="colorPrimaryDark">@color/quantum_googblue600</item>
+        <item name="colorAccent">@color/quantum_googblue600</item>
+    </style>
+
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/quantum_googblue600</item>
+        <item name="android:textColorPrimary">@color/quantum_googblue600</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
 </resources>
