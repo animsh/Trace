@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "222780964521",
+    "firebase_url": "https://trace-a3144.firebaseio.com",
+    "project_id": "trace-a3144",
+    "storage_bucket": "trace-a3144.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222780964521:android:316385f19970cf2650b3b8",
+        "android_client_info": {
+          "package_name": "com.animsh.trace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "222780964521-nmc2tjfhpivguuefnmv8a8u2gn2e8oed.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.animsh.trace",
+            "certificate_hash": "ad57cce318ca864ecfb31b0edc4295135dbf7e14"
+          }
+        },
+        {
+          "client_id": "222780964521-81p1hrr2nqkbgj624fa4j5hctis4tshc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcYBAZx0q6shmNiliKRASpN6gQs5YEVf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "222780964521-81p1hrr2nqkbgj624fa4j5hctis4tshc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

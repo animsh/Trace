@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".SettingActivity"></activity>
+        <activity android:name=".ui.ForgotPasswordActivity"></activity>
+        <activity android:name=".ui.SignUpActivity" />
+        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".SettingActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
