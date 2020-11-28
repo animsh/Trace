@@ -174,7 +174,7 @@ public class EncryptionFragment extends Fragment {
                         @Override
                         public void onSuccess(Uri uri) {
                             //UploadModel model = new UploadModel(uri.toString());
-                            UploadModel upload = new UploadModel(name, uri.toString());
+                            UploadModel upload = new UploadModel(uri.toString(), name);
                             String modelId = root.push().getKey();
                             root.child(modelId).setValue(upload);
                             Log.e("UPLOAD DONE: ", "Success");

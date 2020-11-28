@@ -4,6 +4,9 @@ public class UploadModel {
     private String fileUrl;
     private String name;
 
+    public UploadModel() {
+    }
+
     public UploadModel(String fileUrl, String name) {
         this.fileUrl = fileUrl;
         this.name = name;
