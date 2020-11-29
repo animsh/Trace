@@ -52,6 +52,11 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -174,8 +179,10 @@ public class EncryptionFragment extends Fragment {
                         @Override
                         public void onSuccess(Uri uri) {
                             //UploadModel model = new UploadModel(uri.toString());
-                            UploadModel upload = new UploadModel(uri.toString(), name);
+                            DateFormat df = new SimpleDateFormat("EEE, MMM d, ''yy 'at' h:mm a", Locale.getDefault());
+                            String date = df.format(Calendar.getInstance().getTime());
                             String modelId = root.push().getKey();
+                            UploadModel upload = new UploadModel(uri.toString(), name, modelId, date);
                             root.child(modelId).setValue(upload);
                             Log.e("UPLOAD DONE: ", "Success");
                         }

@@ -45,6 +45,20 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/btn_download"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:drawablePadding="5dp"
+                android:padding="5dp"
+                android:text="Download"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryText"
+                app:drawableTopCompat="@drawable/ic_download" />
+
+            <TextView
                 android:id="@+id/btn_delete"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"

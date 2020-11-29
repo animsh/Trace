@@ -19,17 +19,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
 
 public class BrowseFragment extends Fragment {
 
+    public static UploadFilesAdapter adapter;
     private RecyclerView recyclerView;
     private ArrayList<UploadModel> uploadModels;
-
-    private UploadFilesAdapter adapter;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseStorage storage = FirebaseStorage.getInstance();
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(firebaseAuth.getUid());
 
 
@@ -52,6 +53,8 @@ public class BrowseFragment extends Fragment {
         root.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                uploadModels.clear();
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UploadModel model = dataSnapshot.getValue(UploadModel.class);
                     uploadModels.add(model);
