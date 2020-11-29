@@ -18,10 +18,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.animsh.trace.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -119,22 +126,6 @@ public class SignUpActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-           /* firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("SIGNUP", "createUserWithEmail:success");
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("SIGNUP", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });*/
             validatePhoneNumber(name, phoneNumber, email, password);
         }
 
@@ -146,9 +137,26 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            finish();
+                            DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(firebaseAuth.getUid());
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("NAME",name);
+                            map.put("NUMBER",phoneNumber);
+                            map.put("EMAIL",email);
+                            root.child("USER_DATA").setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    String error = task.getException().getMessage();
+                                    Toast.makeText(SignUpActivity.this, "Error: " + error, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            loadingBar.dismiss();
                         } else {
                             String error = task.getException().getMessage();
                             Toast.makeText(SignUpActivity.this, "Error: " + error, Toast.LENGTH_SHORT).show();

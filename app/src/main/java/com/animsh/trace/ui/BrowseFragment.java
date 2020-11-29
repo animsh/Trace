@@ -31,7 +31,7 @@ public class BrowseFragment extends Fragment {
     private ArrayList<UploadModel> uploadModels;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
-    private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(firebaseAuth.getUid());
+    private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(firebaseAuth.getUid()).child("USER_FILES");
 
 
     public BrowseFragment() {

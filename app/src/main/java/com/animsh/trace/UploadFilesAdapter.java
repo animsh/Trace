@@ -93,7 +93,7 @@ public class UploadFilesAdapter extends RecyclerView.Adapter<UploadFilesAdapter.
                         public void onClick(View view) {
                             String mPostKey = uploadModelArrayList.get(position).getFileKey();
                             DatabaseReference mPostReference = FirebaseDatabase.getInstance().getReference()
-                                    .child(auth.getUid()).child(mPostKey);
+                                    .child(auth.getUid()).child("USER_FILES").child(mPostKey);
                             String path = uploadModelArrayList.get(position).getFileUrl();
                             mPostReference.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

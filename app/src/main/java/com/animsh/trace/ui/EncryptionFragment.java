@@ -183,7 +183,7 @@ public class EncryptionFragment extends Fragment {
                             String date = df.format(Calendar.getInstance().getTime());
                             String modelId = root.push().getKey();
                             UploadModel upload = new UploadModel(uri.toString(), name, modelId, date);
-                            root.child(modelId).setValue(upload);
+                            root.child("USER_FILES").child(modelId).setValue(upload);
                             Log.e("UPLOAD DONE: ", "Success");
                         }
                     });
