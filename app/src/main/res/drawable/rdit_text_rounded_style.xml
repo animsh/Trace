@@ -6,5 +6,5 @@
         android:width="1dp"
         android:color="@color/quantum_googblue700" />
     <corners android:radius="16dp" />
-    <solid android:color="#fff" />
+    <solid android:color="@color/action_bar_background" />
 </shape>

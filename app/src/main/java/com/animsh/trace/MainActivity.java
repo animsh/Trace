@@ -2,9 +2,11 @@ package com.animsh.trace;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,12 +17,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import com.animsh.trace.ui.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        darkModeChecker();
 
         // Navigation Drawer
         final DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
@@ -113,6 +119,23 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         // Bottom Navigation Bar
+    }
+
+    private void darkModeChecker() {
+        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        final boolean isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
+        if (isDarkModeOn) {
+            AppCompatDelegate
+                    .setDefaultNightMode(
+                            AppCompatDelegate
+                                    .MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate
+                    .setDefaultNightMode(
+                            AppCompatDelegate
+                                    .MODE_NIGHT_NO);
+        }
     }
 
     @Override

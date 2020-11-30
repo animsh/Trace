@@ -31,7 +31,7 @@
             android:text="Information"
             android:textAlignment="center"
             android:textAllCaps="false"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/text_color"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -55,7 +55,8 @@
                 android:text="Download"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="@color/text_color"
+                app:drawableTint="@color/image_tint"
                 app:drawableTopCompat="@drawable/ic_download" />
 
             <TextView
@@ -69,7 +70,8 @@
                 android:text="Delete"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="@color/text_color"
+                app:drawableTint="@color/image_tint"
                 app:drawableTopCompat="@drawable/ic_delete" />
 
             <TextView
@@ -83,7 +85,8 @@
                 android:text="Share"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="@color/text_color"
+                app:drawableTint="@color/image_tint"
                 app:drawableTopCompat="@drawable/ic_share" />
 
         </LinearLayout>

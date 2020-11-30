@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
     tools:context=".ProfileActivity">
 
     <LinearLayout
         android:id="@+id/layoutToolBar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/action_bar_background"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -21,22 +22,32 @@
 
         <ImageView
             android:id="@+id/imageBack"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_back"
+            app:tint="@color/image_tint" />
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_weight="1"
+            android:text="My Profile"
+            android:textColor="@color/text_color"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/imageLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="6dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_back"
-            app:tint="@color/colorPrimaryText" />
-
-        <TextView
-            android:id="@+id/textTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:text="My Profile"
-            android:textColor="@color/colorPrimaryText"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:src="@drawable/ic_logout"
+            app:tint="@color/image_tint" />
 
     </LinearLayout>
 
@@ -44,7 +55,6 @@
         android:id="@+id/profile_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
         android:padding="15dp"
@@ -66,9 +76,9 @@
             android:singleLine="true"
             android:text="@string/app_name"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/text_color"
             android:textSize="18sp"
-            app:backgroundTint="@color/colorPrimary" />
+            app:backgroundTint="@color/activity_background_color" />
 
     </LinearLayout>
 
@@ -76,7 +86,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f7f7f7"
+        android:background="@color/image_collection_background"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@+id/profile_container">
 
@@ -171,7 +181,7 @@
             android:backgroundTint="@color/quantum_googblue500"
             android:text="Save"
             android:textAllCaps="false"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/blue_btn_text_color"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -185,7 +195,7 @@
             android:backgroundTint="@color/quantum_googblue500"
             android:text="Forget Password"
             android:textAllCaps="false"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/blue_btn_text_color"
             app:cornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

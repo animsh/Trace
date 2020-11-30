@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Wait we are working on your request"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/text_color"
             android:textSize="13sp"
             android:textStyle="bold" />
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
     android:orientation="vertical"
     tools:context=".SettingActivity">
 
@@ -11,7 +12,7 @@
         android:id="@+id/layoutToolBar"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/action_bar_background"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="15dp"
@@ -20,11 +21,11 @@
 
         <ImageView
             android:id="@+id/backSetting"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_back"
-            app:tint="@color/colorPrimaryText" />
+            app:tint="@color/image_tint" />
 
         <TextView
             android:id="@+id/textTitle"
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:text="Setting"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/text_color"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -56,67 +57,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="Storage"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_margin="15dp"
-                    android:contentDescription="sd card drawable"
-                    android:src="@drawable/ic_sd_card" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Use External Srorage"
-                        android:textColor="@color/colorPrimaryText" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Use SD Card for saving encrypted files" />
-                </LinearLayout>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/sd_card_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:text=""
-                    android:theme="@style/SCBSwitch" />
-            </LinearLayout>
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:background="?android:attr/listDivider" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
-                android:text="Other"
-                android:textSize="12sp" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -128,7 +68,8 @@
                     android:layout_height="22dp"
                     android:layout_margin="15dp"
                     android:contentDescription="dark mode drawable"
-                    android:src="@drawable/ic_night_mode" />
+                    android:src="@drawable/ic_night_mode"
+                    app:tint="@color/image_tint" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -140,12 +81,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Dark Mode"
-                        android:textColor="@color/colorPrimaryText" />
+                        android:textColor="@color/text_color" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Enable dark theme throughout the app" />
+                        android:text="Enable dark theme throughout the app"
+                        android:textColor="@color/subtitle_color" />
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
@@ -169,14 +111,15 @@
                     android:layout_height="22dp"
                     android:layout_margin="15dp"
                     android:contentDescription="dark mode drawable"
-                    android:src="@drawable/ic_info" />
+                    android:src="@drawable/ic_info"
+                    app:tint="@color/image_tint" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="About Trace App"
                     android:textAlignment="center"
-                    android:textColor="@color/colorPrimaryText" />
+                    android:textColor="@color/text_color" />
 
             </LinearLayout>
 

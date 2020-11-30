@@ -3,11 +3,13 @@ package com.animsh.trace;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -19,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.animsh.trace.ui.ForgotPasswordActivity;
+import com.animsh.trace.ui.LoginActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +33,7 @@ import static com.animsh.trace.Constants.saveUserData;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ImageView profile1, profile2, profile3, profile4, profile5, profile6, profile7, profile8, selectedProfile, backButton;
+    private ImageView profile1, profile2, profile3, profile4, profile5, profile6, profile7, profile8, selectedProfile, backButton, logoutButton;
     private EditText profileName;
     private Button saveButton, forgetButton;
 
@@ -53,6 +56,23 @@ public class ProfileActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.save_btn);
         backButton = findViewById(R.id.imageBack);
         forgetButton = findViewById(R.id.forget_btn);
+        logoutButton = findViewById(R.id.imageLogout);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                SharedPreferences pref = ProfileActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putBoolean("isUserLogin", false);
+                editor.putBoolean("isDarkModeOn",false);
+                editor.apply();
+                PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
+                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         profile1.setOnClickListener(new View.OnClickListener() {
             @Override

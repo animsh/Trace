@@ -5,6 +5,7 @@
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
     tools:context=".MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +16,7 @@
             android:id="@+id/layoutToolBar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@color/colorPrimary"
+            android:background="@color/action_bar_background"
             android:elevation="4dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -24,11 +25,11 @@
 
             <ImageView
                 android:id="@+id/imageMenu"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/ic_menu"
-                app:tint="@color/colorPrimaryText" />
+                app:tint="@color/image_tint" />
 
             <TextView
                 android:id="@+id/textTitle"
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:text="@string/app_name"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="@color/text_color"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -69,6 +70,7 @@
             android:id="@+id/bottom_navigation_view"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="@color/bottom_navigation_background"
             android:padding="5dp"
             app:elevation="16dp"
             app:itemIconTint="@drawable/bottom_navigation_state"
@@ -88,6 +90,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemTextColor="@color/text_color"
+        android:background="@color/side_navigation_background"
         app:headerLayout="@layout/layout_navigation_header"
         app:menu="@menu/navigation_drawer_menu" />
 

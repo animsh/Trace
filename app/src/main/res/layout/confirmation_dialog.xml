@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:text="Are you sure?"
-        android:textColor="@color/colorPrimaryText"
+        android:textColor="@color/text_color"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="File: "
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/text_color"
             android:textSize="16sp" />
 
         <TextView
@@ -42,7 +42,7 @@
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/text_color"
             android:textSize="16sp" />
 
         <ImageView
@@ -50,7 +50,8 @@
             android:layout_width="24dp"
             android:layout_height="24sp"
             android:layout_marginStart="5dp"
-            android:src="@drawable/ic_browse_tab" />
+            android:src="@drawable/ic_browse_tab"
+            app:tint="@color/image_tint" />
 
     </LinearLayout>
 
@@ -68,7 +69,7 @@
             android:layout_margin="5dp"
             android:hint="Enter Password"
             android:maxLines="1"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/edit_text_color"
             android:textCursorDrawable="@drawable/colored_cursor"
             android:textSize="16sp" />
 
@@ -79,7 +80,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/password_et_container"
-        android:text="Upload after encrypting file" />
+        android:text="Upload after encrypting file"
+        android:textColor="@color/text_color" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/process_btn"
@@ -90,7 +92,7 @@
         android:layout_margin="5dp"
         android:text="Process"
         android:textAllCaps="false"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/blue_btn_text_color"
         app:backgroundTint="@color/quantum_googblue600" />
 
     <com.google.android.material.button.MaterialButton
@@ -102,5 +104,6 @@
         android:layout_margin="5dp"
         android:text="Cancel"
         android:textAllCaps="false"
-        android:textColor="@color/colorPrimaryText" />
+        android:textColor="@color/text_color"
+        app:backgroundTint="@color/action_bar_background" />
 </RelativeLayout>

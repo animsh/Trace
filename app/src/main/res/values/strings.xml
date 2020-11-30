@@ -14,4 +14,5 @@
     <string name="encrypt_text">Encrypt</string>
     <string name="fast_and_easy_file_nencryption_amp_decryption"><![CDATA[Fast and Easy File\nEncryption & Decryption]]></string>
     <string name="help_and_feedback"><![CDATA[Help & Feedback]]></string>
+    <string name="logout">Logout</string>
 </resources>

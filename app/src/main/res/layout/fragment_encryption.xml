@@ -38,7 +38,7 @@
             android:layout_centerHorizontal="true"
             android:text="@string/fast_and_easy_file_nencryption_amp_decryption"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="@color/text_color"
             android:textSize="22sp" />
 
         <LinearLayout
@@ -57,7 +57,7 @@
                 android:layout_margin="4dp"
                 android:text="@string/encrypt_text"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/blue_btn_text_color"
                 app:backgroundTint="@color/quantum_googblue600"
                 app:icon="@drawable/ic_lock"
                 app:iconSize="20dp"
@@ -71,7 +71,7 @@
                 android:layout_margin="4dp"
                 android:text="@string/decrypt_text"
                 android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/blue_btn_text_color"
                 app:backgroundTint="@color/quantum_googblue600"
                 app:icon="@drawable/ic_unlock"
                 app:iconSize="20dp"

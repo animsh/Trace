@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             fromLogin = true;
                             startActivity(intent);
-                            finish();
+                            LoginActivity.this.finish();
                         } else {
                             String error = task.getException().getMessage();
                             Toast.makeText(LoginActivity.this, "Error: " + error, Toast.LENGTH_SHORT).show();
