@@ -18,7 +18,7 @@
     <color name="image_tint">#ffffff</color>
     <color name="bottom_navigation_background">#1f1f1f</color>
     <color name="activity_background_color">#121212</color>
-    <color name="side_navigation_background">#121212</color>
+    <color name="side_navigation_background">#1f1f1f</color>
     <color name="blue_btn_text_color">#ffffff</color>
     <color name="image_collection_background">#1f1f1f</color>
     <color name="subtitle_color">#949494</color>

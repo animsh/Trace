@@ -82,6 +82,7 @@
         android:inputType="textPersonName"
         android:paddingStart="20dp"
         android:textColor="@color/text_color"
+        android:textColorHint="@color/subtitle_color"
         android:textCursorDrawable="@null"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -102,6 +103,7 @@
         android:inputType="textPassword"
         android:paddingStart="20dp"
         android:textColor="@color/text_color"
+        android:textColorHint="@color/subtitle_color"
         android:textCursorDrawable="@null"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -110,6 +112,7 @@
 
     <EditText
         android:id="@+id/set_phone"
+
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="50dp"
@@ -122,6 +125,7 @@
         android:inputType="phone"
         android:paddingStart="20dp"
         android:textColor="@color/text_color"
+        android:textColorHint="@color/subtitle_color"
         android:textCursorDrawable="@null"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -130,6 +134,7 @@
 
     <EditText
         android:id="@+id/set_email"
+
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="50dp"
@@ -142,6 +147,7 @@
         android:inputType="textEmailAddress"
         android:paddingStart="20dp"
         android:textColor="@color/text_color"
+        android:textColorHint="@color/subtitle_color"
         android:textCursorDrawable="@null"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
