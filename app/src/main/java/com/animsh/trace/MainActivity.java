@@ -1,10 +1,16 @@
 package com.animsh.trace;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +23,11 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import static com.animsh.trace.Constants.fetchUserdata;
+import static com.animsh.trace.Constants.fromLogin;
+import static com.animsh.trace.Constants.restoreUserData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,6 +51,26 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.navigationView);
         // to remove default black tint of navigation drawer icons
         navigationView.setItemIconTintList(null);
+
+        View header = navigationView.getHeaderView(0);
+        TextView uName = header.findViewById(R.id.user_name);
+        TextView uEmail = header.findViewById(R.id.user_phone_number);
+
+        if (fromLogin) {
+            Dialog dialog = new Dialog(MainActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.loading_dialog);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+            fetchUserdata(FirebaseAuth.getInstance(), MainActivity.this, dialog, uName, uEmail);
+        } else {
+            String[] data = restoreUserData(MainActivity.this);
+            Log.e("FROM: ", data[0]);
+            uName.setText(data[0]);
+            uEmail.setText(data[1]);
+        }
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

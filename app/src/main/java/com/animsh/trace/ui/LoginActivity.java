@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import static com.animsh.trace.Constants.fromLogin;
+
 public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin;
@@ -124,6 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             savePrefsData();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            fromLogin = true;
                             startActivity(intent);
                             finish();
                         } else {

@@ -12,17 +12,22 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -52,7 +57,6 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -434,7 +438,7 @@ public class EncryptionFragment extends Fragment {
         EditText password;
         private Context context;
         private Dialog dialog;
-        private boolean upload;
+        private boolean upload,isNull;
 
         public EncryptTask(Context context, EditText password, boolean upload) {
             this.context = context;
@@ -449,6 +453,11 @@ public class EncryptionFragment extends Fragment {
             String fileName = parts[0];
             try {
                 Uri file = encrypt(stringFilePath, strFileName, dialog, password);
+                if(file == null){
+                    isNull = true;
+                } else {
+                    isNull = false;
+                }
                 if (upload) {
                     uploadFIle(file);
                 }
@@ -466,6 +475,13 @@ public class EncryptionFragment extends Fragment {
             password.setText("");
             if (dialog.isShowing()) {
                 dialog.dismiss();
+            }
+            if (isNull) {
+                Toast.makeText(context, "Failed Try Again", Toast.LENGTH_LONG).show();
+            } else {
+                if (upload) {
+                    Toast.makeText(context, "Uploading file in background", Toast.LENGTH_LONG).show();
+                }
             }
         }
 

@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.animsh.trace.R;
+import com.animsh.trace.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,9 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -138,11 +136,9 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(firebaseAuth.getUid());
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("NAME",name);
-                            map.put("NUMBER",phoneNumber);
-                            map.put("EMAIL",email);
-                            root.child("USER_DATA").setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            UserModel upload = new UserModel(name, email, phoneNumber);
+                            String key = root.push().getKey();
+                            root.child("USER_DATA").child(key).setValue(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
