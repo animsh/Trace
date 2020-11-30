@@ -52,7 +52,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         otpProgress = findViewById(R.id.otp_sent_progressbar);
 
         txtPasswordTitle.setText("Forgot Password ?");
-        txtPasswordDetail.setText("We just need your registered phone number to send you password reset code");
+        txtPasswordDetail.setText("We just need your registered email to send you password reset code");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -70,13 +70,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         btnForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                otpProgress.setVisibility(View.VISIBLE);
                 String email = getEmail.getText().toString().trim();
 
                 if (email.equals("")) {
                     Toast.makeText(ForgotPasswordActivity.this, "Enter mail", Toast.LENGTH_SHORT).show();
                 } else {
+                    otpProgress.setVisibility(View.VISIBLE);
                     firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

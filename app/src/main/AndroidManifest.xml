@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="q">
-        <activity android:name=".ui.ForgotPasswordActivity"></activity>
+        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ui.ForgotPasswordActivity" />
         <activity android:name=".ui.SignUpActivity" />
         <activity android:name=".ui.LoginActivity">
             <intent-filter>
@@ -28,9 +29,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingActivity" />
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

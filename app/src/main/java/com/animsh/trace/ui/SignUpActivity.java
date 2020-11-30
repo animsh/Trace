@@ -136,8 +136,8 @@ public class SignUpActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(firebaseAuth.getUid());
-                            UserModel upload = new UserModel(name, email, phoneNumber);
                             String key = root.push().getKey();
+                            UserModel upload = new UserModel(name, email, phoneNumber, key, R.drawable.image_1);
                             root.child("USER_DATA").child(key).setValue(upload).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

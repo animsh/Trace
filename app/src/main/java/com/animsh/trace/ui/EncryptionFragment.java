@@ -12,16 +12,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -438,7 +434,7 @@ public class EncryptionFragment extends Fragment {
         EditText password;
         private Context context;
         private Dialog dialog;
-        private boolean upload,isNull;
+        private boolean upload, isNull;
 
         public EncryptTask(Context context, EditText password, boolean upload) {
             this.context = context;
@@ -453,7 +449,7 @@ public class EncryptionFragment extends Fragment {
             String fileName = parts[0];
             try {
                 Uri file = encrypt(stringFilePath, strFileName, dialog, password);
-                if(file == null){
+                if (file == null) {
                     isNull = true;
                 } else {
                     isNull = false;

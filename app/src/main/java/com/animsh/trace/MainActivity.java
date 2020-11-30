@@ -31,6 +31,8 @@ import static com.animsh.trace.Constants.restoreUserData;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView uName, uEmail;
+    ImageView uImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,18 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setItemIconTintList(null);
 
         View header = navigationView.getHeaderView(0);
-        TextView uName = header.findViewById(R.id.user_name);
-        TextView uEmail = header.findViewById(R.id.user_phone_number);
+        uName = header.findViewById(R.id.user_name);
+        uEmail = header.findViewById(R.id.user_phone_number);
+        ImageView editProfile = header.findViewById(R.id.edit_profile);
+        uImage = header.findViewById(R.id.imageProfile);
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         if (fromLogin) {
             Dialog dialog = new Dialog(MainActivity.this);
@@ -64,12 +76,13 @@ public class MainActivity extends AppCompatActivity {
             dialog.setCanceledOnTouchOutside(false);
             dialog.setCancelable(false);
             dialog.show();
-            fetchUserdata(FirebaseAuth.getInstance(), MainActivity.this, dialog, uName, uEmail);
+            fetchUserdata(FirebaseAuth.getInstance(), MainActivity.this, dialog, uName, uEmail, uImage);
         } else {
             String[] data = restoreUserData(MainActivity.this);
             Log.e("FROM: ", data[0]);
             uName.setText(data[0]);
             uEmail.setText(data[1]);
+            uImage.setImageResource(Integer.parseInt(data[4]));
         }
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -102,5 +115,25 @@ public class MainActivity extends AppCompatActivity {
         // Bottom Navigation Bar
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (fromLogin) {
+            Dialog dialog = new Dialog(MainActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.loading_dialog);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+            fetchUserdata(FirebaseAuth.getInstance(), MainActivity.this, dialog, uName, uEmail, uImage);
+        } else {
+            String[] data = restoreUserData(MainActivity.this);
+            Log.e("FROM: ", data[0]);
+            uName.setText(data[0]);
+            uEmail.setText(data[1]);
+            uImage.setImageResource(Integer.parseInt(data[4]));
+        }
 
+    }
 }
