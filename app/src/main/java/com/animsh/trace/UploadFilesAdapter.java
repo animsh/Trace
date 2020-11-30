@@ -28,6 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 import static com.animsh.trace.ui.BrowseFragment.adapter;
+import static com.animsh.trace.ui.BrowseFragment.animationView;
 
 public class UploadFilesAdapter extends RecyclerView.Adapter<UploadFilesAdapter.MyViewHolder> {
 
@@ -102,6 +103,7 @@ public class UploadFilesAdapter extends RecyclerView.Adapter<UploadFilesAdapter.
                                     reference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            animationView.setVisibility(View.VISIBLE);
                                             adapter.notifyDataSetChanged();
                                             Toast.makeText(itemView.getContext(), "File Deleted", Toast.LENGTH_LONG).show();
                                         }

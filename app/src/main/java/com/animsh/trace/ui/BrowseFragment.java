@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.animsh.trace.R;
 import com.animsh.trace.UploadFilesAdapter;
 import com.animsh.trace.UploadModel;
@@ -32,7 +33,7 @@ public class BrowseFragment extends Fragment {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     private DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(firebaseAuth.getUid()).child("USER_FILES");
-
+    public static LottieAnimationView animationView;
 
     public BrowseFragment() {
         // Required empty public constructor
@@ -43,6 +44,7 @@ public class BrowseFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_browse, container, false);
 
+        animationView = view.findViewById(R.id.animation_view);
         recyclerView = view.findViewById(R.id.encrypted_files_recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -54,10 +56,12 @@ public class BrowseFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 uploadModels.clear();
-
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UploadModel model = dataSnapshot.getValue(UploadModel.class);
                     uploadModels.add(model);
+                }
+                if(uploadModels.size() != 0){
+                    animationView.setVisibility(View.GONE);
                 }
                 adapter.notifyDataSetChanged();
             }
