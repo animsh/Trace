@@ -1,5 +1,6 @@
 package com.animsh.trace.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -29,7 +30,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     Button btnBack;
     TextView otpSentSuccessfully;
     ProgressBar otpProgress;
-    String parentDBName = "Users";
     private FirebaseAuth firebaseAuth;
 
     @Override
@@ -60,10 +60,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
-                startActivity(intent);*/
+                Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
+                startActivity(intent);
                 finish();
-
             }
         });
 
@@ -94,5 +93,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        btnBack.callOnClick();
+        super.onBackPressed();
     }
 }

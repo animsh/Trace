@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/activity_background_color"
     android:orientation="vertical"
-    tools:context=".SettingActivity">
+    tools:context=".ui.SettingActivity">
 
     <LinearLayout
         android:id="@+id/layoutToolBar"

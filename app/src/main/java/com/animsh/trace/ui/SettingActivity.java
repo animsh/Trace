@@ -1,4 +1,4 @@
-package com.animsh.trace;
+package com.animsh.trace.ui;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
+
+import com.animsh.trace.R;
 
 public class SettingActivity extends AppCompatActivity {
 

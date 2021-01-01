@@ -1,4 +1,4 @@
-package com.animsh.trace;
+package com.animsh.trace.ui;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -20,16 +20,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.animsh.trace.ui.ForgotPasswordActivity;
-import com.animsh.trace.ui.LoginActivity;
+import com.animsh.trace.R;
+import com.animsh.trace.model.UserModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import static com.animsh.trace.Constants.restoreUserData;
-import static com.animsh.trace.Constants.saveUserData;
+import static com.animsh.trace.util.Constants.restoreUserData;
+import static com.animsh.trace.util.Constants.saveUserData;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -65,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
                 SharedPreferences pref = ProfileActivity.this.getSharedPreferences("myPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit();
                 editor.putBoolean("isUserLogin", false);
-                editor.putBoolean("isDarkModeOn",false);
+                editor.putBoolean("isDarkModeOn", false);
                 editor.apply();
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
                 Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
@@ -194,9 +194,17 @@ public class ProfileActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        backButton.callOnClick();
+        super.onBackPressed();
     }
 }

@@ -1,4 +1,4 @@
-package com.animsh.trace;
+package com.animsh.trace.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,14 +23,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.animsh.trace.ui.LoginActivity;
+import com.animsh.trace.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import static com.animsh.trace.Constants.fetchUserdata;
-import static com.animsh.trace.Constants.fromLogin;
-import static com.animsh.trace.Constants.restoreUserData;
+import static com.animsh.trace.util.Constants.fetchUserdata;
+import static com.animsh.trace.util.Constants.fromLogin;
+import static com.animsh.trace.util.Constants.restoreUserData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

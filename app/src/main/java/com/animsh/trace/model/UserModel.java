@@ -1,4 +1,4 @@
-package com.animsh.trace;
+package com.animsh.trace.model;
 
 public class UserModel {
 

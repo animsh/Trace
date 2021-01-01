@@ -16,16 +16,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 
-import com.animsh.trace.MainActivity;
 import com.animsh.trace.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import static com.animsh.trace.Constants.fromLogin;
+import static com.animsh.trace.util.Constants.fromLogin;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtForgetPassword;
     FirebaseAuth firebaseAuth;
     private ProgressDialog loadingBar;
-    private String parentDBName = "Users";
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+.[a-z]+";
 
     @Override
@@ -47,8 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         // check activity id already opened
-        SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        /*SharedPreferences sharedPreferences = getSharedPreferences("myPrefs", MODE_PRIVATE);
         final boolean isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
         if (isDarkModeOn) {
             AppCompatDelegate
@@ -66,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent homePageActivity = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(homePageActivity);
             finish();
-        }
+        }*/
 
         setContentView(R.layout.activity_login);
 
@@ -87,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -102,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -152,11 +150,6 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    public boolean restorePrefData() {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs", MODE_PRIVATE);
-        return pref.getBoolean("isUserLogin", false);
     }
 
     private void savePrefsData() {

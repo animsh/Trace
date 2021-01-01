@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.animsh.trace.R;
-import com.animsh.trace.UploadFilesAdapter;
-import com.animsh.trace.UploadModel;
+import com.animsh.trace.adapter.UploadFilesAdapter;
+import com.animsh.trace.model.UploadModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

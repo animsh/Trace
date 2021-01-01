@@ -32,7 +32,7 @@ import androidx.fragment.app.Fragment;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.animsh.trace.R;
-import com.animsh.trace.UploadModel;
+import com.animsh.trace.model.UploadModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
